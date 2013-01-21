@@ -1,0 +1,9 @@
+pre
+	form(style="margin-top:20px;margin-bottom:20px;",method='post',action='/login').form-signin
+		h2.form-signin-heading Please sign in
+		input(type="email" , placeholder="Email address", name="email", required).input-block-level
+		input(type="password" , placeholder="Password", name="password", required).input-block-level
+		label.checkbox
+			input(type="checkbox", value="remember-me") 
+			| Remember me
+		button(class="btn btn-large btn-primary",type="submit") Sign in

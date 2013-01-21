@@ -1,0 +1,22 @@
+div(ng-init="getList('programs')", ng-controller="CollectionCtrl")
+	h2(ng-hide="collections!=''",style="text-align:center") No data
+	div(style="text-align:center;margin-bottom:3px;padding:0;").alert.alert-info
+		h5 TWITTER
+	table(ng-show="collections!=''").table.table-striped.table-bordered.table-hover
+		thead
+			tr
+				th Program
+				th Hashtag
+				th 
+		tbody
+			tr(ng-repeat="collection in collections")
+				td {{collection.name | uppercase}}
+				td {{collection.hashtag|lowercase}}
+				td
+					div(ng-controller="socketCtrl").pull-right
+						a(ng-href="/tweets/{{collection._id}}")
+							span(style="margin-right:5px;").badge.badge-info Last 3 days Tweets						
+						a(ng-href="/tweets/{{collection._id}}")
+							span(style="margin-right:5px;").badge.badge-success 8 Tweets Approved for today
+						a(ng-href="/tweets/{{collection._id}}")
+							span(style="margin-right:5px;").badge.badge-important {{newTweets}} New Tweets

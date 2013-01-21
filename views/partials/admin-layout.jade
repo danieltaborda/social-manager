@@ -1,0 +1,18 @@
+div.row-fluid
+	div.span12
+		div.span2
+				ul.nav.nav-pills.nav-stacked
+					li(ng-class="{active : isActive('/admin/$')}")
+						a(href="/admin/#")
+							i.icon-edit
+							|  Collections
+					li(ng-class="{active : isActive('/admin/config/$')}")
+						a(href="/admin/config/")
+							i.icon-wrench
+							|  Config
+					li(ng-class="{active : isActive('/admin/logs/$')}")
+						a(href="/admin/logs/")
+							i.icon-lock
+							|  Logs
+		div.span10
+			block content

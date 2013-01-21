@@ -1,0 +1,77 @@
+extends admin-layout
+
+block content
+	ul.unstyled
+		li(ng-repeat="module in adminFormCollections")	
+			div(style="margin:0 0 10px 10px; text-align:center").span3
+				a(ng-click="reset()",data-toggle="modal",ng-href="/admin/\#{{module.name}}")
+					img(src="{{module.img}}")
+					div(margin-right:10px;")
+						{{module.name | uppercase}} MANAGER
+				//a(ng-click="reset()",ng-href="/admin/\#{{module.name}}").btn.btn-danger Cancel2
+			div(id="{{module.name}}")(ui-modal class="fade")(ng-model="modalShown")
+				div.modal-header
+					button(type="button")(data-dismiss="modal").close
+						i.icon-remove
+					h4 MANAGE {{module.name  | uppercase}} 
+				div.modal-body
+					form(ng-submit="add(module.name,data)")
+						ul.unstyled
+							li(ng-repeat="form in module.form")
+								div(ng-switch on="form.type")
+									div(ng-switch-when="input-text")
+										input( type="text", placeholder="{{form.name}} here..", name="{{form.name}}", ng-model="data[form.name]" , required ).input-block-level
+									div(ng-switch-when="input-email")
+										input( type="email", placeholder="{{form.name}} here..", name="{{form.name}}", ng-model="data[form.name]", required  ).input-block-level
+									div(ng-switch-when="input-password")
+										input( type="password", placeholder="{{form.name}} here..", name="{{form.name}}", ng-model="data[form.name]", required  ).input-block-level
+									div(ng-switch-when="input-date")
+										input(type="text", placeholder="{{form.name}} here..", name="{{form.name}}",ng-model="data[form.name]" , ui-date).input-block-level
+									div(ng-switch-when="input-list")
+										select(ng-model="data[form.name]", ng-options="c.name for c in form.options", required)
+											option(value="") Select {{form.name}} here..
+									div(ng-switch-when="fileImage")																
+											div(class="fileupload fileupload-new",data-provides="fileupload" )
+												div(class="fileupload-new thumbnail",style="width: 200px; height: 150px;")
+													img(src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=no+image")
+												div(class="fileupload-preview fileupload-exists thumbnail",style="max-width: 200px; max-height: 150px; line-height: 20px;")
+												div
+													span(class="btn btn-file")
+														span.fileupload-new Select Image
+														span.fileupload-exists Change
+														input(type="file")
+													button(class="btn fileupload-exists", data-dismiss="fileupload") Remove			
+						<!-- pre {{module.name}}: {{log | json}} -->
+						div.modal-footer(style="margin: 15px -15px -15px -15px")
+							label(ng-show = "result", ng-bind="result",style="text-align:center", class="{{success}}").label
+							div.btn-toolbar
+								div.btn-group
+									a(data-toggle="modal",data-dismiss="modal",ng-href="/admin/\#{{module.name}}_").btn
+										i.icon-list
+										|  List
+									button(data-dismiss="modal")(aria-hidden="true").btn.btn-danger Cancel				
+									button(aria-hidden="true").btn.btn-primary Add to {{module.name}}
+			div(id="{{module.name}}_")(ui-modal class="fade")(ng-model="modal")
+				div.modal-header
+					button(type="button")(data-dismiss="modal").close 
+						i.icon-remove
+					h4 MANAGE {{module.name  | uppercase}}
+				div.modal-body
+					div(ng-init="getList(module.name)", ng-controller="CollectionCtrl")
+						h2(ng-hide="collections!=''",style="text-align:center") No data
+						div( ng-repeat="collection in collections")	
+							pre
+								btn.btn.btn-mini.pull-right(ng-click="delete(module.name,collection._id,$index)")
+									i.icon-remove
+								div( ng-repeat="(k,collect) in collection")
+									span(ng-show="(k != '_id') && (k!='log')")
+										b {{k | uppercase}}: 
+										| {{collect}}
+																
+				div.modal-footer
+					div.btn-toolbar
+								div.btn-group
+									a(data-toggle="modal",data-dismiss="modal",ng-href="/admin/\#{{module.name}}").btn
+										i.icon-hand-left
+										|  Return
+									button(data-dismiss="modal")(aria-hidden="true").btn.btn-danger Cancel
